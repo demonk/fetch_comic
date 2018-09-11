@@ -13,6 +13,7 @@ class Comics(scrapy.Spider):
     name = "comics"
 
     def __init__(self):
+
         self.workPool = WorkPool(10)
 
     def start_requests(self):
@@ -46,7 +47,7 @@ class Comics(scrapy.Spider):
         if not is_last:
             next_page = base + '/' + page_a_list[-2]['href']
             if next_page is not None:
-                print '\n--------- parse next page ---------'
+                print ('\n--------- parse next page ---------')
                 yield scrapy.Request(next_page, callback=self.comics_cover_parse)
 
     def comics_cover_parse(self, response):
@@ -118,7 +119,7 @@ class Comics(scrapy.Spider):
             self.log('save image finished:' + pic_name)
 
         except Exception as e:
-            print e.message
+            print (e.message)
             self.log('save image error.')
             self.log(e)
 
@@ -131,8 +132,8 @@ class Comics(scrapy.Spider):
                 req = urllib2.Request(url, headers=header)
                 res = urllib2.urlopen(req)
                 return res
-            except Exception, e:
-                print u'error in %s' % (url)
+            except Exception as e:
+                print (u'error in %s' % (url))
 
     def readData(self, url):
         response = self.openUrl(url)
@@ -143,5 +144,5 @@ class Comics(scrapy.Spider):
                 if response.info().get('Content-Encoding') == 'gzip':
                     data = zlib.decompress(data, 16 + zlib.MAX_WBITS)
                 return data
-            except Exception, e:
+            except Exception as e:
                 self.log(e)
